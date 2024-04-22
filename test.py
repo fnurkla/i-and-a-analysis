@@ -49,7 +49,7 @@ for line in lines:
     
     output_chunks = output.split("\n\n")
 
-    outfile_name = out_dir + "/" + name + ".txt"
+    outfile_name = out_dir + "/" + name + ".csv"
 
     with open(outfile_name, "w") as outfile:
         outfile.write(output_chunks[-1])
