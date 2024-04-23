@@ -18,7 +18,8 @@ if not os.path.isfile(jd_path):
 
 dl_dir = "dls"
 out_dir = "out"
-subprocess.run(["mkdir", "-p", dl_dir, out_dir])
+plots_dir = "plots"
+subprocess.run(["mkdir", "-p", dl_dir, out_dir, plots_dir])
 
 filename = sys.argv[1]          # File with one jar dl link on each line
 
