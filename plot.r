@@ -1,8 +1,9 @@
 # Reading data and creating pdf with scatterplot
 #
-file_name <- "out/junit-jupiter-api-5.10.2.jar"
-file_name_csv <- paste(file_name, "csv", sep = ".")
-file_name_pdf <- paste(file_name, "pdf", sep = ".")
+output_path <- "out/result.pdf"
+files_path <- "out"
+
+files <- list.files(path=files_path, pattern="*.csv", full.names=TRUE, recursive=FALSE)
 
 read_data <- function(file) {
   data <- read.csv(file)
@@ -12,8 +13,17 @@ read_data <- function(file) {
   data
 }
 
-frame <- read_data(file_name_csv)
+read_all_data <- function() {
+  data <- list()
+  for (file in files) {
+    df <- read_data(file)
+    data <- rbind(data, df)
+  }
+  data
+}
 
-pdf(file_name_pdf)
-plot(frame) # plot to pdf file
+data <- read_all_data()
+
+pdf(output_path)
+plot(data) # plot to pdf file
 dev.off()
