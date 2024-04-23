@@ -52,5 +52,6 @@ for line in lines:
     outfile_name = out_dir + "/" + name + ".csv"
 
     with open(outfile_name, "w") as outfile:
+        outfile.write("name,CC,AC,Ca,Ce,A,I,D,V\n")
         outfile.write(output_chunks[-1])
 
