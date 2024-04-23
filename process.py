@@ -27,6 +27,8 @@ with open(filename, 'r') as file:
 
 for line in lines:
     url = line.strip()
+    if url[0] == "#":
+        continue
     s = [string for string in line.strip().split("/") if string != ""]
     if len(s) == 0:
         continue
