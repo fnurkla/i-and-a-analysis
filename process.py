@@ -40,7 +40,7 @@ for line in lines:
         subprocess.run(["rm", name])
         os.chdir("..")
 
-    output = subprocess.run(["java",
+    output = subprocess.run(["java", "-Duser.language=en", "-Duser.region=US",
                     "-cp", ".:" + jd_path,
                     "jdepend.textui.JDepend",
                     dl_dir + "/" + dir_name], capture_output=True)
