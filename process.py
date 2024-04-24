@@ -43,13 +43,29 @@ for line in lines:
         subprocess.run(["rm", name])
         os.chdir("..")
 
+    jd_prop_file="jdepend.properties"
+    subprocess.run(["rm", "-f", jd_prop_file])
+
+    with open(jd_prop_file, "a") as file:
+        file.write("ignore.java=java.*\n")
+        if not "javax" in name:
+            file.write("ignore.javax=javax.*\n")
+        if not "sun" in name:
+            file.write("ignore.sun=sun.*,com.sun.*\n")
+        if not "kotlin" in name:
+            file.write("ignore.kotlin=kotlin.*\n")
+        if not "clojure" in name:
+            file.write("ignore.clojure=clojure.*\n")
+        if not "scala" in name:
+            file.write("ignore.scala=scala.*\n")
+
     output = subprocess.run(["java", "-Duser.language=en", "-Duser.region=US",
                     "-cp", ".:" + jd_path,
                     "jdepend.textui.JDepend",
                     dl_dir + "/" + dir_name], capture_output=True)
 
     output = output.stdout.decode("utf8") # Decode output bytes into a string
-    
+
     output_chunks = output.split("\n\n")
 
     outfile_name = out_dir + "/" + name + ".csv"
