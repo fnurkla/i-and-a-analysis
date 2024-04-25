@@ -62,3 +62,33 @@ hist(df_D,
   breaks = 100
 )
 dev.off()
+
+
+# install.packages("plot3D")
+library(plot3D)
+
+z <- table(df_A_I)
+
+name <- "ALL_TOGETHER_I_A_heatmap"
+output_path <- paste("plots/", name, ".pdf", sep = "")
+pdf(output_path)
+image2D(z = z, border = "black") ##  Plot as a 2D heatmap:
+dev.off()
+
+name <- "ALL_TOGETHER_I_A_heatmap_without_edges" # without x = 0, x = 1, y = 0, y = 1
+output_path <- paste("plots/", name, ".pdf", sep = "")
+pdf(output_path)
+image2D(z = z[2:87, 2:91], border = "black") ##  Plot as a 2D heatmap:
+dev.off()
+
+name <- "ALL_TOGETHER_3D_I_A_histogram"
+output_path <- paste("plots/", name, ".pdf", sep = "")
+pdf(output_path)
+hist3D(z = z, border = "black") ##  Plot as a 3D histogram:
+dev.off()
+
+name <- "ALL_TOGETHER_3D_I_A_histogram_without_edges" # without x = 0, x = 1, y = 0, y = 1
+output_path <- paste("plots/", name, ".pdf", sep = "")
+pdf(output_path)
+hist3D(z = z[2:87, 2:91], border = "black") ##  Plot as a 3D histogram:
+dev.off()
