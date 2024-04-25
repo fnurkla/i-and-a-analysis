@@ -47,6 +47,23 @@ name <- "ALL_TOGETHER_scatter_plot"
 output_path <- paste("plots/", name, ".pdf", sep = "")
 pdf(output_path)
 plot(df_A_I, xlim = c(0.0, 1.0), ylim = c(0.0, 1.0)) # plot to pdf file
+# adding lines at some fractions along x-axis
+abline(h = 0, col = "red")
+abline(h = 1, col = "red")
+abline(h = 1 / 2, col = "red")
+abline(h = 1 / 3, col = "red")
+abline(h = 2 / 3, col = "red")
+abline(h = 1 / 4, col = "red")
+abline(h = 3 / 4, col = "red")
+# adding lines at some fractions along y-axis
+abline(v = 0, col = "red")
+abline(v = 1, col = "red")
+abline(v = 1 / 2, col = "red")
+abline(v = 1 / 3, col = "red")
+abline(v = 2 / 3, col = "red")
+abline(v = 1 / 4, col = "red")
+abline(v = 3 / 4, col = "red")
+
 title(main = name)
 dev.off()
 
@@ -55,7 +72,6 @@ df_D <- data[, 3] # data frame for Distance from the Main Sequence
 name <- "ALL_TOGETHER_distance_histogram"
 output_path <- paste("plots/", name, ".pdf", sep = "")
 pdf(output_path)
-# plot(df_A_I, xlim = c(0.0, 1.0), ylim = c(0.0, 1.0)) # plot to pdf file
 hist(df_D,
   xlab = "Distance from the Main Sequence",
   ylab = "Number of Packages",
