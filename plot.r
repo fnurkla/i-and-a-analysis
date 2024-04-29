@@ -83,7 +83,7 @@ dev.off()
 # install.packages("plot3D")
 library(plot3D)
 
-z <- table(df_A_I)
+z <- table(df_A_I) # Creates a table with the number of packages at different decimal coordinates (A, I)
 
 name <- "ALL_TOGETHER_I_A_heatmap"
 output_path <- paste("plots/", name, ".pdf", sep = "")
@@ -108,3 +108,26 @@ output_path <- paste("plots/", name, ".pdf", sep = "")
 pdf(output_path)
 hist3D(z = z[2:87, 2:91], border = "black") ##  Plot as a 3D histogram:
 dev.off()
+
+
+# Calculates the (A, I) pairs with the most packages
+
+max_indices <- which(z > 5, arr.ind = TRUE) # Finds the indices of the (A, I) pairs with more than 5 packages
+packages <- z[max_indices] # Extracts the x and y coordinates
+result <- cbind(max_indices, packages) # Combines coordinates and values (number of packages)
+sorted_result <- result[order(result[, "packages"], decreasing = TRUE), ] # Sorts the result by number of packages
+sorted_frame <- data.frame(sorted_result) # Converts table to frame
+
+sorted_frame$A <- rownames(z)[sorted_frame$A] # Changes indices to actual values of A
+sorted_frame$I <- colnames(z)[sorted_frame$I] # Changes indices to actual values of I
+sorted_frame$percent <- sorted_frame$packages / sum(z) * 100 # Creates a column for percent of total number of packages
+
+# Sets row names of the frame to 1, 2, 3 ...
+row_names <- seq_len(nrow(sorted_frame))
+row.names(sorted_frame) <- row_names
+
+# Prints a table with the pairs (A, I) where the most packages are
+cat("\n")
+print(sorted_frame)
+cat("\n")
+print(paste(sum(sorted_frame$percent), "% of packages have the A and I pairs listed above."))
