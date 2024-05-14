@@ -42,13 +42,16 @@ make_scatter_plot <- function(file, df) {
 data <- read_all_data()
 
 # makes a scatter plot with packages from all projects
-df_A_I <- data[, 1:2] # data frame for Abstractness and Instability
+df_I_A <- data[, 1:2] # data frame for Abstractness and Instability
+df_I_A <- df_I_A[, c("I", "A")] # switches place of the colomns I and A so that the plots have I on the x-axis
 name <- "ALL_TOGETHER_scatter_plot"
 output_path <- paste("plots/", name, ".pdf", sep = "")
 pdf(output_path)
-plot(df_A_I, xlim = c(0.0, 1.0), ylim = c(0.0, 1.0)) # plot to pdf file
-abline(a = 1, b = -1, col = "black") # line showing the main sequence
+plot(df_I_A, xlim = c(0.0, 1.0), ylim = c(0.0, 1.0)) # plot to pdf file
 title(main = name)
+abline(a = 1, b = -1, col = "blue", lwd = 2) # line showing the main sequence
+mod <- lm(df_I_A$A ~ df_I_A$I) # linear regression
+abline(mod, col = "red", lwd = 2)
 dev.off()
 
 # makes a histogram showing every packages distance from the main sequence
@@ -56,18 +59,25 @@ df_D <- data[, 3] # data frame for Distance from the Main Sequence
 name <- "ALL_TOGETHER_distance_histogram"
 output_path <- paste("plots/", name, ".pdf", sep = "")
 pdf(output_path)
-hist(df_D,
+histogram <- hist(df_D,
   xlab = "Distance from the Main Sequence",
   ylab = "Number of Packages",
   breaks = 10
 )
 dev.off()
+print("Histogram bar heights:")
+counts <- histogram$counts
+total <- sum(counts)
+less_than_0.2 <- sum(counts[1:2]) / total
+less_than_0.5 <- sum(counts[1:5]) / total
+print(paste("d < 0.2 :", less_than_0.2, "%", sep = ""))
+print(paste("d < 0.5 :", less_than_0.5, "%", sep = ""))
 
 
 # install.packages("plot3D")
 library(plot3D)
 
-z <- table(df_A_I) # Creates a table with the number of packages at different decimal coordinates (A, I)
+z <- table(df_I_A) # Creates a table with the number of packages at different decimal coordinates (I, A)
 
 name <- "ALL_TOGETHER_I_A_heatmap"
 output_path <- paste("plots/", name, ".pdf", sep = "")
@@ -94,23 +104,24 @@ hist3D(z = z[2:87, 2:91], border = "black") ##  Plot as a 3D histogram:
 dev.off()
 
 
-# Calculates the (A, I) pairs with the most packages
+# Calculates the (I, A) pairs with the most packages
 
-max_indices <- which(z > 5, arr.ind = TRUE) # Finds the indices of the (A, I) pairs with more than 5 packages
+max_indices <- which(z > 5, arr.ind = TRUE) # Finds the indices of the (I, A) pairs with more than 5 packages
 packages <- z[max_indices] # Extracts the x and y coordinates
 result <- cbind(max_indices, packages) # Combines coordinates and values (number of packages)
 sorted_result <- result[order(result[, "packages"], decreasing = TRUE), ] # Sorts the result by number of packages
 sorted_frame <- data.frame(sorted_result) # Converts table to frame
 
-sorted_frame$A <- rownames(z)[sorted_frame$A] # Changes indices to actual values of A
-sorted_frame$I <- colnames(z)[sorted_frame$I] # Changes indices to actual values of I
+sorted_frame$A <- colnames(z)[sorted_frame$A] # Changes indices to actual values of A
+sorted_frame$I <- rownames(z)[sorted_frame$I] # Changes indices to actual values of I
 sorted_frame$percent <- sorted_frame$packages / sum(z) * 100 # Creates a column for percent of total number of packages
 
 # Sets row names of the frame to 1, 2, 3 ...
 row_names <- seq_len(nrow(sorted_frame))
 row.names(sorted_frame) <- row_names
 
-# Prints a table with the pairs (A, I) where the most packages are
+# Prints a table with the pairs (I, A) where the most packages are
+print("Most frequent (I, A) coordinates")
 cat("\n")
 print(sorted_frame)
 cat("\n")
